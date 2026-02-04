@@ -5,8 +5,11 @@
 	$login = $_POST['login'];
 	$password = $_POST['password'];
 	
+	// Хешируем пароль перед проверкой
+	$passwordHash = md5($password);
+	
 	// ищем пользователя
-	$query_user = $mysqli->query("SELECT * FROM `users` WHERE `login`='".$login."' AND `password`= '".$password."';");
+	$query_user = $mysqli->query("SELECT * FROM `users` WHERE `login`='".$login."' AND `password`= '".$passwordHash."';");
 	
 	$id = -1;
 	while($user_read = $query_user->fetch_row()) {
