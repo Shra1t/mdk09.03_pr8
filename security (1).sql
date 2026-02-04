@@ -2,8 +2,8 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Хост: 127.0.0.1:3307
--- Время создания: Ноя 20 2024 г., 12:45
+-- Хост: 127.0.0.1:3306
+-- Время создания: Фев 04 2026 г., 19:45
 -- Версия сервера: 8.0.30
 -- Версия PHP: 8.1.9
 
@@ -78,9 +78,10 @@ CREATE TABLE `users` (
 -- Дамп данных таблицы `users`
 --
 
-INSERT INTO `users` (`id`, `login`, `email`, `password`, `roll`) VALUES
-(1, 'admin', 'admin@example.com', 'Asdfg123', 1),
-(8, 'user', 'user@example.com', 'Asdfg123', 0);
+INSERT INTO `users` (`id`, `login`, `email`, `password`, `roll`, `active_session_id`) VALUES
+(1, 'admin', 'admin@example.com', '274efe9fab0b00b7c75b551f2f8f0c13', 1, NULL),
+(8, 'user', 'user@example.com', '274efe9fab0b00b7c75b551f2f8f0c13', 0, NULL),
+(26, 'Shra1t', 'Flacko2018@mail.ru', '9b2d841cd58cea2797f1f02421984a4d', 0, '8pkter6vmgqk24rhvoa6eg4n9m42irai');
 
 --
 -- Индексы сохранённых таблиц
@@ -124,7 +125,7 @@ ALTER TABLE `news`
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
