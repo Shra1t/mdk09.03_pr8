@@ -68,6 +68,7 @@ INSERT INTO `news` (`id`, `title`, `text`, `img`) VALUES
 CREATE TABLE `users` (
   `id` int NOT NULL,
   `login` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `roll` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
@@ -76,9 +77,9 @@ CREATE TABLE `users` (
 -- Дамп данных таблицы `users`
 --
 
-INSERT INTO `users` (`id`, `login`, `password`, `roll`) VALUES
-(1, 'admin', 'Asdfg123', 1),
-(8, 'user', 'Asdfg123', 0);
+INSERT INTO `users` (`id`, `login`, `email`, `password`, `roll`) VALUES
+(1, 'admin', 'admin@example.com', 'Asdfg123', 1),
+(8, 'user', 'user@example.com', 'Asdfg123', 0);
 
 --
 -- Индексы сохранённых таблиц

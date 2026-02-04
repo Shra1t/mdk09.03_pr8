@@ -7,8 +7,9 @@
 			
 			$user_query = $mysqli->query("SELECT * FROM `users` WHERE `id` = ".$_SESSION['user']);
 			while($user_read = $user_query->fetch_row()) {
-				if($user_read[3] == 0) header("Location: user.php");
-				else if($user_read[3] == 1) header("Location: admin.php");
+				// Структура: id(0), login(1), email(2), password(3), roll(4)
+				if($user_read[4] == 0) header("Location: user.php");
+				else if($user_read[4] == 1) header("Location: admin.php");
 			}
 		}
  	}
@@ -34,7 +35,7 @@
 		<div class="space"> </div>
 		<div class="main">
 			<div class="content">
-				<div class = "login">
+				<div class = "login" id="login-step">
 					<div class="name">Авторизация</div>
 				
 					<div class = "sub-name">Логин:</div>
@@ -46,6 +47,16 @@
 					<br><a href="recovery.php">Забыли пароль?</a>
 					<input type="button" class="button" value="Войти" onclick="LogIn()"/>
 					<img src = "img/loading.gif" class="loading"/>
+				</div>
+				
+				<div class="login" id="code-step" style="display: none;">
+					<div class="name">Подтверждение входа</div>
+					
+					<div class="sub-name">Код из письма:</div>
+					<input name="_code" type="text" maxlength="6" placeholder="Введите 6-значный код"/>
+					
+					<input type="button" class="button" value="Подтвердить" onclick="VerifyCode()"/>
+					<img src="img/loading.gif" class="loading-code" style="display: none;"/>
 				</div>
 				
 				<div class="footer">
@@ -83,12 +94,20 @@
 					contentType : false, 
 					// функция успешного ответа сервера
 					success: function (_data) {
-						console.log("Авторизация прошла успешно, id: " +_data);
+						console.log("Ответ сервера: " + _data);
 						if(_data == "") {
 							loading.style.display = "none";
 							button.className = "button";
 							alert("Логин или пароль не верный.");
+						} else if (_data == "code_sent") {
+							// Переходим на шаг ввода кода
+							loading.style.display = "none";
+							button.className = "button";
+							document.getElementById("login-step").style.display = "none";
+							document.getElementById("code-step").style.display = "block";
+							alert("На вашу почту отправлен код авторизации.");
 						} else {
+							// На случай, если в будущем будет прямой вход без кода
 							localStorage.setItem("token", _data);
 							location.reload();
 							loading.style.display = "none";
@@ -99,6 +118,49 @@
 					error: function( ){
 						console.log('Системная ошибка!');
 						loading.style.display = "none";
+						button.className = "button";
+					}
+				});
+			}
+			
+			function VerifyCode() {
+				var loadingCode = document.getElementsByClassName("loading-code")[0];
+				var button = document.querySelector("#code-step .button");
+				var _code = document.getElementsByName("_code")[0].value;
+				
+				if (_code.length != 6) {
+					alert("Введите 6-значный код.");
+					return;
+				}
+				
+				loadingCode.style.display = "block";
+				button.className = "button_diactive";
+				
+				var data = new FormData();
+				data.append("code", _code);
+				
+				$.ajax({
+					url         : 'ajax/verify_code.php',
+					type        : 'POST',
+					data        : data,
+					cache       : false,
+					dataType    : 'html',
+					processData : false,
+					contentType : false,
+					success: function (_data) {
+						console.log("Проверка кода, ответ: " + _data);
+						if (_data == "") {
+							alert("Неверный код авторизации.");
+							loadingCode.style.display = "none";
+							button.className = "button";
+						} else {
+							localStorage.setItem("token", _data);
+							location.reload();
+						}
+					},
+					error: function () {
+						console.log('Системная ошибка!');
+						loadingCode.style.display = "none";
 						button.className = "button";
 					}
 				});

@@ -3,6 +3,7 @@
 	include("../settings/connect_datebase.php");
 	
 	$login = $_POST['login'];
+	$email = $_POST['email'];
 	$password = $_POST['password'];
 	
 	// Проверка сложности пароля на стороне сервера
@@ -30,14 +31,14 @@
 	// Хешируем пароль перед сохранением
 	$passwordHash = md5($password);
 	
-	// ищем пользователя
+	// ищем пользователя по логину
 	$query_user = $mysqli->query("SELECT * FROM `users` WHERE `login`='".$login."'");
 	$id = -1;
 	
 	if($user_read = $query_user->fetch_row()) {
 		echo $id;
 	} else {
-		$mysqli->query("INSERT INTO `users`(`login`, `password`, `roll`) VALUES ('".$login."', '".$passwordHash."', 0)");
+		$mysqli->query("INSERT INTO `users`(`login`, `email`, `password`, `roll`) VALUES ('".$login."', '".$email."', '".$passwordHash."', 0)");
 		
 		$query_user = $mysqli->query("SELECT * FROM `users` WHERE `login`='".$login."' AND `password`= '".$passwordHash."';");
 		$user_new = $query_user->fetch_row();

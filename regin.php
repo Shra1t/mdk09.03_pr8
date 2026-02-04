@@ -7,8 +7,9 @@
 			
 			$user_query = $mysqli->query("SELECT * FROM `users` WHERE `id` = ".$_SESSION['user']);
 			while($user_read = $user_query->fetch_row()) {
-				if($user_read[3] == 0) header("Location: user.php");
-				else if($user_read[3] == 1) header("Location: admin.php");
+				// Структура: id(0), login(1), email(2), password(3), roll(4)
+				if($user_read[4] == 0) header("Location: user.php");
+				else if($user_read[4] == 1) header("Location: admin.php");
 			}
 		}
  	}
@@ -39,6 +40,8 @@
 				
 					<div class = "sub-name">Логин:</div>
 					<input name="_login" type="text" placeholder="" onkeypress="return PressToEnter(event)"/>
+					<div class = "sub-name">E-mail:</div>
+					<input name="_email" type="text" placeholder="" onkeypress="return PressToEnter(event)"/>
 					<div class = "sub-name">Пароль:</div>
 					<input name="_password" type="password" placeholder="" onkeypress="return PressToEnter(event)"/>
 					<div class = "sub-name">Повторите пароль:</div>
@@ -78,10 +81,12 @@
 			
 			function RegIn() {
 				var _login = document.getElementsByName("_login")[0].value;
+				var _email = document.getElementsByName("_email")[0].value;
 				var _password = document.getElementsByName("_password")[0].value;
 				var _passwordCopy = document.getElementsByName("_passwordCopy")[0].value;
 				
 				if(_login != "") {
+					if(_email != "") {
 					if(_password != "") {
 						if(_password == _passwordCopy) {
 							
@@ -95,6 +100,7 @@
 							
 							var data = new FormData();
 							data.append("login", _login);
+							data.append("email", _email);
 							data.append("password", _password);
 							
 							// AJAX запрос
@@ -134,20 +140,24 @@
 							});
 						} else alert("Пароли не совподают.");
 					} else alert("Введите пароль.");
+				} else alert("Введите почту.");
 				} else alert("Введите логин.");
 			}
 			
 			function PressToEnter(e) {
 				if (e.keyCode == 13) {
 					var _login = document.getElementsByName("_login")[0].value;
+					var _email = document.getElementsByName("_email")[0].value;
 					var _password = document.getElementsByName("_password")[0].value;
 					var _passwordCopy = document.getElementsByName("_passwordCopy")[0].value;
 					
 					if(_password != "") {
 						if(_login != "") {
+						if(_email != "") {
 							if(_passwordCopy != "") {
 								RegIn();
 							}
+						}
 						}
 					}
 				}
