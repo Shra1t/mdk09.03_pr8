@@ -5,6 +5,28 @@
 	$login = $_POST['login'];
 	$password = $_POST['password'];
 	
+	// Проверка сложности пароля на стороне сервера
+	function isStrongPassword($password) {
+		// длина более 8 символов
+		if (strlen($password) <= 8) return false;
+		// латинские буквы
+		if (!preg_match('/[A-Za-z]/', $password)) return false;
+		// цифры
+		if (!preg_match('/[0-9]/', $password)) return false;
+		// хотя бы один символ, который не буква и не цифра
+		if (!preg_match('/[^A-Za-z0-9]/', $password)) return false;
+		// хотя бы одна заглавная буква
+		if (!preg_match('/[A-Z]/', $password)) return false;
+		
+		return true;
+	}
+	
+	if (!isStrongPassword($password)) {
+		// -2 — пароль не соответствует требованиям
+		echo -2;
+		exit;
+	}
+	
 	// ищем пользователя
 	$query_user = $mysqli->query("SELECT * FROM `users` WHERE `login`='".$login."'");
 	$id = -1;

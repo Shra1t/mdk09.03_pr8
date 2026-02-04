@@ -61,6 +61,21 @@
 			var loading = document.getElementsByClassName("loading")[0];
 			var button = document.getElementsByClassName("button")[0];
 			
+			function isStrongPassword(password) {
+				// длина более 8 символов
+				if (password.length <= 8) return false;
+				// есть латинские буквы
+				if (!/[A-Za-z]/.test(password)) return false;
+				// есть цифры
+				if (!/[0-9]/.test(password)) return false;
+				// есть хотя бы один символ, который не буква и не цифра
+				if (!/[^A-Za-z0-9]/.test(password)) return false;
+				// есть хотя бы одна заглавная буква
+				if (!/[A-Z]/.test(password)) return false;
+				
+				return true;
+			}
+			
 			function RegIn() {
 				var _login = document.getElementsByName("_login")[0].value;
 				var _password = document.getElementsByName("_password")[0].value;
@@ -69,6 +84,12 @@
 				if(_login != "") {
 					if(_password != "") {
 						if(_password == _passwordCopy) {
+							
+							if (!isStrongPassword(_password)) {
+								alert("Пароль должен быть длиннее 8 символов, содержать латинские буквы, хотя бы одну заглавную букву, цифры и специальные символы.");
+								return;
+							}
+							
 							loading.style.display = "block";
 							button.className = "button_diactive";
 							
@@ -89,9 +110,13 @@
 								contentType : false, 
 								// функция успешного ответа сервера
 								success: function (_data) {
-									console.log("Авторизация прошла успешно, id: " +_data);
+									console.log("Регистрация ответ: " + _data);
 									if(_data == -1) {
 										alert("Пользователь с таким логином существует.");
+										loading.style.display = "none";
+										button.className = "button";
+									} else if (_data == -2) {
+										alert("Пароль не соответствует требованиям безопасности.");
 										loading.style.display = "none";
 										button.className = "button";
 									} else {
