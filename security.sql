@@ -70,7 +70,8 @@ CREATE TABLE `users` (
   `login` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `roll` int NOT NULL
+  `roll` int NOT NULL,
+  `active_session_id` varchar(255) DEFAULT NULL COMMENT 'ID текущей сессии (одна сессия на пользователя)'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --

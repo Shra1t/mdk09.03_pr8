@@ -35,6 +35,11 @@
 		<div class="space"> </div>
 		<div class="main">
 			<div class="content">
+				<?php if (isset($_GET['expired']) && $_GET['expired'] == '1'): ?>
+				<div class="login" style="margin-bottom: 10px; background: #fff3cd; border: 1px solid #ffc107;">
+					<div class="name" style="color: #856404;">Время сеанса истекло. Вы вошли с другого браузера или устройства. Войдите в систему ещё раз.</div>
+				</div>
+				<?php endif; ?>
 				<div class = "login" id="login-step">
 					<div class="name">Авторизация</div>
 				
